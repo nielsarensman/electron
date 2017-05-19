@@ -1,0 +1,3 @@
+div#enemybase {
+    cursor: url("../cursors/scope.ani"), url("../cursors/scope1.cur"), url("../cursors/biggerscope.gif"), crosshair;
+}

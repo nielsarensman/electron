@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="nl" style="background-color: #111111; color: azure;">
+<head>
+    <meta charset="UTF-8">
+    <title>SpaceClicker</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<audio id="attack" src="audio/tie-fire.wav"></audio>
+
+<div id="enemybase" onclick="attack()" style="width: 600px; height: 400px; background-image: url(images/mc80.png);">
+    <audio id="boem" src="audio/boem.wav"></audio>
+    <div style="background-color: darkslategrey; width: 516px; height: 56px;">
+        <fieldset id="healthbarbox" class="healthbarbox" style="background-color: darkslategrey; padding: 0 4px 4px 4px; text-align: center;">
+            <legend id="healthbarboxtext" style="color: red">100%</legend>
+            <div style="background-color: transparent; width: 500px; height: 30px; text-align: center;">
+                <div id="healthbar" class="healthbar" style="height: 100%; width: 100%; background-color: chartreuse">
+
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <p id="enemyhp">Health = 100%</p><p id="money">Money = €0,00</p>
+</div>
+<div class="ships">
+    <div class="tiefighter">
+        <!--<img src="" alt="Tie-Fighter">-->
+    </div>
+</div>
+<div class="shop">
+    <fieldset>
+        <legend>Shop</legend>
+        <div class="items">
+            <button onclick="addShip()" style="display: inline;">Add Ship (€1000,-)</button><p id="ships" style="display: inline; margin-left: 4px;">Ships = 1</p><br>
+            <button onclick="devattack()" disabled>Devattack</button>
+
+        </div>
+    </fieldset>
+</div>
+
+<script>
+    var enemyhealth = 100.00;
+    var multiplier = 1;
+    var healthprop = "";
+    var money = 0;
+    var ships = 1;
+    var end = false;
+    var backgroundcolor = "chartreuse";
+
+    //cursor1();
+
+    function attack() {
+        if (((Math.round(((enemyhealth- (0.1 * multiplier)) * 1000000))) / 1000000) > 0) {
+            enemyhealth = enemyhealth - (0.1 * multiplier);
+            enemyhealth = (Math.round((enemyhealth * 1000000))) / 1000000;
+            document.getElementById("enemyhp").innerHTML = "Health = " + enemyhealth + "%";
+            healthprop = "height: 100%; width: " + enemyhealth + "%; background-color: " + backgroundcolor;
+            document.getElementById("healthbar").setAttribute("style", healthprop);
+            document.getElementById("healthbarboxtext").innerHTML = enemyhealth + "%";
+            document.getElementById("attack").play();
+            money = money + 10.05;
+            money = (Math.round((money * 1000))) / 1000;
+            document.getElementById("money").innerHTML = "Money = €" + dotcomma(money);
+        }
+        else {
+            enemyhealth = 0;
+            document.getElementById("enemyhp").innerHTML = "Health = " + enemyhealth + "%";
+            healthprop = "height: 100%; width: " + enemyhealth + "%; background-color: chartreuse";
+            document.getElementById("healthbar").setAttribute("style", healthprop);
+            document.getElementById("healthbarboxtext").innerHTML = enemyhealth + "%";
+            if (end == false) {
+                document.getElementById("boem").play();
+                document.getElementById("enemybase").setAttribute("style", "600px; height: 400px; background-image: none;");
+                end = true;
+            }
+
+        }
+
+        if ((enemyhealth <= 66.66) && (enemyhealth >= 33.33)){
+            backgroundcolor = "yellow"
+        }
+        else {
+            backgroundcolor = "chartreuse"
+        }
+        if (enemyhealth <=33.33){
+            backgroundcolor = "red"
+        }
+    }
+
+    function devattack() {
+        enemyhealth = 1;
+        document.getElementById("enemyhp").innerHTML = "Health = " + enemyhealth + "%";
+        healthprop = "height: 100%; width: " + enemyhealth + "%; background-color: chartreuse";
+        document.getElementById("healthbar").setAttribute("style", healthprop);
+        document.getElementById("healthbarboxtext").innerHTML = enemyhealth + "%";
+    }
+
+    function dotcomma(transfer) {
+        var fixed = "";
+        for (var i = 0; transfer.length; i++){
+            if (transfer[i] != '.') {
+                fixed = fixed + transfer[i];
+            }
+            else {
+                fixed = fixed + ',';
+            }
+        }
+        return transfer;
+    }
+
+    function addShip() {
+        if (money >= 1000){
+            money = money - 1000;
+            money = (Math.round((money * 1000))) / 1000;
+            document.getElementById("money").innerHTML = "Money = €" + dotcomma(money);
+            ships = ships + 1;
+            document.getElementById("ships").innerHTML = "Ships = " + ships;
+            multiplier = multiplier + 1;
+        }
+    }
+
+    function cursor1() {
+        document.getElementById("enemybase").style.cursor = "url('cursor/scope1.cur'), crosshair";
+        console.log("cur1");
+        setTimeout(cursor2, 2000);
+    }
+
+    function cursor2() {
+        document.getElementById("enemybase").style.cursor = "url('cursor/scope2.cur'), crosshair";
+        console.log("cur2");
+        setTimeout(cursor3, 2000);
+    }
+
+    function cursor3() {
+        document.getElementById("enemybase").style.cursor = "url('cursor/scope3.cur'), crosshair";
+        console.log("cur3");
+        setTimeout(cursor4, 2000);
+    }
+
+    function cursor4() {
+        document.getElementById("enemybase").style.cursor = "url('cursor/scope2.cur'), crosshair";
+        console.log("cur4");
+        setTimeout(cursor1, 2000);
+    }
+
+	
+    // You can also require other files to run in this process
+    require('./renderer.js')
+  
+	
+</script>
+
+
+</body>
+</html>
